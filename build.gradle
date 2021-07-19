@@ -1,0 +1,65 @@
+plugins {
+    id 'org.springframework.boot' version '2.5.2'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+}
+
+group = 'br.com.ferracini.kafka'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    set('testcontainersVersion', "1.15.3")
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.kafka:spring-kafka'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'junit', module: 'junit'
+    }
+    testImplementation(
+            'org.springframework.kafka:spring-kafka-test',
+            'org.testcontainers:junit-jupiter',
+            'org.testcontainers:kafka',
+            'org.junit.vintage:junit-vintage-engine',
+            'org.junit.jupiter:junit-jupiter-api',
+            'org.junit.jupiter:junit-jupiter-params'
+    )
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
+    }
+}
+
+test {
+    useJUnitPlatform {
+        includeEngines 'junit-jupiter'
+    }
+    systemProperty 'junit.jupiter.conditions.deactivate', '*'
+//	systemProperties = [
+//			'junit.jupiter.extensions.autodetection.enabled': 'true',
+//			'junit.jupiter.testinstance.lifecycle.default': 'per_class'
+//	]
+}
+
+/**
+ * Using Spring Boot > 2.4.0
+ If you are using Spring Boot > 2.4.0, then there is nothing you have to do to use JUnit 5 Jupiter, because the spring-boot-starter-test library no longer includes the vintage-engine dependency (which transitively included JUnit 4), just include the starter dependency to the project and you're good to go. Use the useJUnitPlatform() in the Gradle configuration.
+
+ Using 2.4.0 > Spring Boot > 2.2.0
+ If you use earlier versions, I'd suggest using a version higher than 2.2.0.RELEASE, which is where the Spring team added support for JUnit 5 Jupiter into the spring-boot-starter-test by default.
+
+ In these versions, the library included the Vintage Engine dependency too, which could be used to run JUnit 4 tests using the JUnit 5 Jupiter platform. If you don't need to execute JUnit 4 tests, then the spring team suggests excluding org.junit.vintage:junit-vintage-engine (not just junit as indicated in the description):
+
+ testCompile('org.springframework.boot:spring-boot-starter-test') {
+ exclude group: 'org.junit.vintage'
+ }
+ */
