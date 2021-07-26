@@ -6,7 +6,13 @@ plugins {
 
 group = 'br.com.ferracini.kafka'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+
+allprojects {
+    tasks.withType(JavaCompile) {
+        sourceCompatibility = 11
+        targetCompatibility = 11
+    }
+}
 
 repositories {
     mavenCentral()
@@ -17,15 +23,27 @@ ext {
 }
 
 dependencies {
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.kafka:spring-kafka'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    //implementation "org.flywaydb:flyway-core"
+
+    runtimeOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'org.postgresql:postgresql'
+
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'junit', module: 'junit'
+        //exclude group: 'junit', module: 'junit'
     }
     testImplementation(
             'org.springframework.kafka:spring-kafka-test',
             'org.testcontainers:junit-jupiter',
             'org.testcontainers:kafka',
+            'org.testcontainers:postgresql',
             'org.junit.vintage:junit-vintage-engine',
             'org.junit.jupiter:junit-jupiter-api',
             'org.junit.jupiter:junit-jupiter-params'
@@ -49,7 +67,29 @@ test {
 //			'junit.jupiter.testinstance.lifecycle.default': 'per_class'
 //	]
 }
+task testContainers(type: Test) {
+    useJUnitPlatform {
+        includeTags "test-containers"
+    }
+    testLogging {
+        showStandardStreams = true
+        events = ["failed", "skipped", "passed"]
+        exceptionFormat = "full"
+    }
+    shouldRunAfter test
+}
 
+task testFlyway(type: Test) {
+    useJUnitPlatform {
+        includeTags "flyway"
+    }
+    testLogging {
+        showStandardStreams = true
+        events = ["failed", "skipped", "passed"]
+        exceptionFormat = "full"
+    }
+    shouldRunAfter testFlyway
+}
 /**
  * Using Spring Boot > 2.4.0
  If you are using Spring Boot > 2.4.0, then there is nothing you have to do to use JUnit 5 Jupiter, because the spring-boot-starter-test library no longer includes the vintage-engine dependency (which transitively included JUnit 4), just include the starter dependency to the project and you're good to go. Use the useJUnitPlatform() in the Gradle configuration.

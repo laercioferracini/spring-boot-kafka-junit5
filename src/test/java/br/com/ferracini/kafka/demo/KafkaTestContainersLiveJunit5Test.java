@@ -7,6 +7,7 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.*;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -27,13 +30,14 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 
 @SpringBootTest(classes = DemoApplication.class)
 @DirtiesContext
 @Testcontainers
-@ExtendWith(KafkaContainerExtension.class)
+@ExtendWith(SpringExtension.class)
+@ActiveProfiles("test-containers")
+@Disabled
 class KafkaTestContainersLiveJunit5Test {
 
     @Container
@@ -52,11 +56,12 @@ class KafkaTestContainersLiveJunit5Test {
     public void givenKafkaDockerContainer_whenSendingtoSimpleProducer_thenMessageReceived() throws Exception {
         String payload = "Sending with own controller";
         producer.send(topic, payload);
-        consumer.getLatch().await(10000, TimeUnit.MILLISECONDS);
+        boolean await = consumer.getLatch().await(10000, TimeUnit.MILLISECONDS);
 
         assertThat(consumer.getLatch().getCount(), equalTo(0L));
         assertThat(consumer.getTopic(), containsString("embedded-test-topic"));
         assertThat(consumer.getPayload(), containsString(payload));
+        assertThat(await, is(false));
     }
 
     @TestConfiguration

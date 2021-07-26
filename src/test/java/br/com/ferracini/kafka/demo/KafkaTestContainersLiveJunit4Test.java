@@ -7,8 +7,9 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +19,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.*;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.utility.DockerImageName;
 
@@ -27,13 +28,14 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 
-@RunWith(SpringRunner.class)
+
 @Import(KafkaTestContainersLiveJunit4Test.KafkaTestContainersConfiguration.class)
 @SpringBootTest(classes = DemoApplication.class)
 @DirtiesContext
+@ExtendWith(SpringExtension.class)
+@Disabled
 public class KafkaTestContainersLiveJunit4Test {
 
     @ClassRule
@@ -52,24 +54,25 @@ public class KafkaTestContainersLiveJunit4Test {
     public void givenKafkaDockerContainer_whenSendingtoSimpleProducer_thenMessageReceived() throws Exception {
         String payload = "Sending with own controller";
         producer.send(topic, payload);
-        consumer.getLatch().await(10000, TimeUnit.MILLISECONDS);
+        boolean await = consumer.getLatch().await(10000, TimeUnit.MILLISECONDS);
 
         assertThat(consumer.getLatch().getCount(), equalTo(0L));
         assertThat(consumer.getTopic(), containsString("embedded-test-topic"));
         assertThat(consumer.getPayload(), containsString(payload));
+        assertThat(await, is(false));
     }
 
     @TestConfiguration
     static class KafkaTestContainersConfiguration {
         @Bean
-        ConcurrentKafkaListenerContainerFactory<Integer, String> kafkaListenerContainerFactory(){
+        ConcurrentKafkaListenerContainerFactory<Integer, String> kafkaListenerContainerFactory() {
             var factory = new ConcurrentKafkaListenerContainerFactory<Integer, String>();
             factory.setConsumerFactory(consumerFactory());
             return factory;
         }
 
         @Bean
-        public ConsumerFactory<Integer, String> consumerFactory(){
+        public ConsumerFactory<Integer, String> consumerFactory() {
             return new DefaultKafkaConsumerFactory<>(consumerConfigs());
         }
 
@@ -93,9 +96,11 @@ public class KafkaTestContainersLiveJunit4Test {
 
             return new DefaultKafkaProducerFactory<>(configProps);
         }
+
         @Bean
-        public KafkaTemplate<String, String> kafkaTemplate(){
+        public KafkaTemplate<String, String> kafkaTemplate() {
             return new KafkaTemplate<>(producerFactory());
         }
     }
 }
+
