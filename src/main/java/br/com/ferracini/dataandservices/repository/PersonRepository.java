@@ -1,7 +1,7 @@
-package br.com.ferracini.kafka.demo.dataandservices.repository;
+package br.com.ferracini.dataandservices.repository;
 
 
-import br.com.ferracini.kafka.demo.dataandservices.entity.Person;
+import br.com.ferracini.dataandservices.entity.Person;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

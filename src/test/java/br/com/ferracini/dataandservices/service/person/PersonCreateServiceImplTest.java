@@ -1,7 +1,7 @@
-package br.com.ferracini.kafka.demo.dataandservices.service.person;
+package br.com.ferracini.dataandservices.service.person;
 
-import br.com.ferracini.kafka.demo.dataandservices.exception.ValidationFailedException;
-import br.com.ferracini.kafka.demo.dataandservices.repository.PersonRepository;
+import br.com.ferracini.dataandservices.exception.ValidationFailedException;
+import br.com.ferracini.dataandservices.repository.PersonRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

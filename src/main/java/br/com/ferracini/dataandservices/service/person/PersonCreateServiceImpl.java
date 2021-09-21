@@ -1,9 +1,9 @@
-package br.com.ferracini.kafka.demo.dataandservices.service.person;
+package br.com.ferracini.dataandservices.service.person;
 
-import br.com.ferracini.kafka.demo.dataandservices.converters.DTOConverters;
-import br.com.ferracini.kafka.demo.dataandservices.dto.PersonDTO;
-import br.com.ferracini.kafka.demo.dataandservices.entity.Person;
-import br.com.ferracini.kafka.demo.dataandservices.repository.PersonRepository;
+import br.com.ferracini.dataandservices.converters.DTOConverters;
+import br.com.ferracini.dataandservices.dto.PersonDTO;
+import br.com.ferracini.dataandservices.entity.Person;
+import br.com.ferracini.dataandservices.repository.PersonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

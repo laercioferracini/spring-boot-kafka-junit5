@@ -1,4 +1,4 @@
-package br.com.ferracini.kafka.demo.dataandservices.dto;
+package br.com.ferracini.dataandservices.dto;
 
 import lombok.Value;
 

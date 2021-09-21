@@ -1,7 +1,7 @@
-package br.com.ferracini.kafka.demo.dataandservices.service.person;
+package br.com.ferracini.dataandservices.service.person;
 
-import br.com.ferracini.kafka.demo.dataandservices.exception.ValidationFailedException;
-import br.com.ferracini.kafka.demo.dataandservices.repository.PersonRepository;
+import br.com.ferracini.dataandservices.exception.ValidationFailedException;
+import br.com.ferracini.dataandservices.repository.PersonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,4 +1,4 @@
-package br.com.ferracini.kafka.demo.dataandservices.service.person;
+package br.com.ferracini.dataandservices.service.person;
 
 import org.springframework.transaction.annotation.Transactional;
 

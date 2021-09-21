@@ -1,6 +1,6 @@
-package br.com.ferracini.kafka.demo.dataandservices.service.person;
+package br.com.ferracini.dataandservices.service.person;
 
-import br.com.ferracini.kafka.demo.dataandservices.dto.PersonDTO;
+import br.com.ferracini.dataandservices.dto.PersonDTO;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

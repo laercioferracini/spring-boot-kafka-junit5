@@ -1,4 +1,4 @@
-package br.com.ferracini.kafka.demo.dataandservices.entity;
+package br.com.ferracini.dataandservices.entity;
 
 import lombok.Getter;
 

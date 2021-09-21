@@ -1,4 +1,4 @@
-package br.com.ferracini.kafka.demo.dataandservices.exception;
+package br.com.ferracini.dataandservices.exception;
 
 public class ValidationFailedException extends RuntimeException {
     public ValidationFailedException(String message) {

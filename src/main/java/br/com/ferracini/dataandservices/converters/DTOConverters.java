@@ -1,7 +1,7 @@
-package br.com.ferracini.kafka.demo.dataandservices.converters;
+package br.com.ferracini.dataandservices.converters;
 
-import br.com.ferracini.kafka.demo.dataandservices.dto.PersonDTO;
-import br.com.ferracini.kafka.demo.dataandservices.entity.Person;
+import br.com.ferracini.dataandservices.dto.PersonDTO;
+import br.com.ferracini.dataandservices.entity.Person;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
